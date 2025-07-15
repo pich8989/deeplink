@@ -64,7 +64,7 @@ if __name__ == "__main__":
     # Only generate QR code once when the script starts
     url = "http://10.59.17.246:5000/open"  # Replace with your IP/domain
     qr = qrcode.make(url)
-    qr.save("isaf_qr.png")
+    qr.save("isaf_qr2.png")
     print("✅ QR code saved as isaf_qr.png")
 
     # Start Flask app
