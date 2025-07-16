@@ -4,7 +4,7 @@ import qrcode
 app = Flask(__name__)
 
 # App config
-APP_SCHEME = "isaf://"
+APP_SCHEME = "http://mis.ncdd.gov.kh/isaf/"
 IOS_APP_ID = "1485492588"
 ANDROID_PACKAGE_NAME = "kh.gov.ncdd.isaf"
 
@@ -32,7 +32,12 @@ def open_app():
             body {{
                 font-family: sans-serif;
                 text-align: center;
-                margin-top: 100px;
+                padding-top: 50px;
+            }}
+            #message {{
+                margin-top: 30px;
+                font-size: 18px;
+                color: #333;
             }}
             button {{
                 padding: 10px 20px;
@@ -41,30 +46,35 @@ def open_app():
         </style>
         <script>
             function openApp() {{
-                var now = Date.now();
-                window.location = "{APP_SCHEME}";
+                const now = Date.now();
+                document.getElementById('message').innerText = "Launching your app...";
+
+                window.location = "isaf://";  // Use your real app scheme
+
                 setTimeout(function () {{
-                    if (Date.now() - now < 2500) {{
+                    const elapsed = Date.now() - now;
+                    if (elapsed < 1500) {{
+                        document.getElementById('message').innerText = "⚠️ No app found. Please install it first.";
+                        // Optional: redirect to store
                         window.location = "{store_url}";
                     }}
-                }}, 2000);
+                }}, 1200);
             }}
         </script>
     </head>
     <body>
-        <h1>Open the ISAF App</h1>
-        <p>If you have the app installed, click below to open it.</p>
+        <h1>ISAF App Launcher</h1>
         <button onclick="openApp()">Open App</button>
-        <p style="margin-top:20px;">If nothing happens, <a href="{store_url}">click here to install the app</a>.</p>
+        <div id="message"></div>
     </body>
     </html>
     """)
 
 if __name__ == "__main__":
     # Only generate QR code once when the script starts
-    url = "https://deeplink-2-nvlm.onrender.com/open"  # Replace with your IP/domain
+    url = "http://192.168.0.74:5000/open"  # Replace with your IP/domain
     qr = qrcode.make(url)
-    qr.save("isaf_qr_deeplink.png")
+    qr.save("isaf_qr_deeplink1.png")
     print("✅ QR code saved as isaf_qr.png")
 
     # Start Flask app
